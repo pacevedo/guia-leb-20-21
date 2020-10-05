@@ -2,7 +2,16 @@
   <div class="team">
     <v-container class="ma-0 pa-0">
       <v-row>
-        <v-col cols="12" sm="9" md="9">
+        <v-col cols="12" sm="12" md="12">
+          <v-btn
+              color="primary"
+              @click="goBack"
+              right
+              fixed
+            >Volver
+          </v-btn>
+        </v-col>
+        <v-col cols="12" sm="12" md="12">
           <img class="logo-big" :src="getLogo()"/>
           <h2>{{ team.team }}</h2>
           <div class="coach">
@@ -14,13 +23,6 @@
               </span>
             </div>
           </div>
-        </v-col>
-        <v-col cols="12" sm="3" md="3">
-          <v-btn
-              color="primary"
-              @click="goBack"
-            >Volver
-          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -46,7 +48,7 @@
                   <tr v-for="player in teamPlayers" :key="player.name">
                     <td class="text-center">{{ player.position }}</td>
                     <td class="text-center">{{ player.number }}</td>
-                    <td><a :href="getLinkPlayer(player.id)">{{ player.name }}</a></td>
+                    <td><a :href="getLinkPlayer(player.id)">{{ getShortName(player.name) }}</a></td>
                     <td>
                       <img class="flag-small" :src="getFlag(getNationality(player.nationality,1))" :alt="getNationality(player.nationality,1)"/> 
                       <span v-if="hasDoubleNationality(player.nationality)"> / 
@@ -91,7 +93,7 @@
                 <tbody>
                   <tr v-for="player in teamPlayers" :key="player.name">
                     <td class="td-pos">{{ player.position }}</td>
-                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ player.name }}</a></td>
+                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ getShortName(player.name) }}</a></td>
                     <td class="td-team">
                       {{ player.lastSeason.team }}
                       <span v-if="player.lastSeason.category !== ''">
@@ -136,7 +138,7 @@
                 <tbody>
                   <tr v-for="player in teamPlayers" :key="player.name">
                     <td class="td-pos">{{ player.position }}</td>
-                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ player.name }}</a></td>
+                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ getShortName(player.name) }}</a></td>
                     <td class="td-team">
                       {{ player.lastSeason.team }}
                       <span v-if="player.lastSeason.category !== ''">
@@ -179,7 +181,7 @@
                 <tbody>
                   <tr v-for="player in teamPlayers" :key="player.name">
                     <td class="td-pos">{{ player.position }}</td>
-                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ player.name }}</a></td>
+                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ getShortName(player.name) }}</a></td>
                     <td class="td-team">
                       {{ player.lastSeason.team }}
                       <span v-if="player.lastSeason.category !== ''">
@@ -217,7 +219,7 @@
                 <tbody>
                   <tr v-for="player in teamPlayers" :key="player.name">
                     <td class="td-pos">{{ player.position }}</td>
-                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ player.name }}</a></td>
+                    <td class="td-name"><a :href="getLinkPlayer(player.id)">{{ getShortName(player.name) }}</a></td>
                     <td class="td-team">
                       {{ player.lastSeason.team }}
                       <span v-if="player.lastSeason.category !== ''">
@@ -285,7 +287,7 @@ export default {
       return PlayerService.getTotalMinutes(mins, matches)
     },
     getRatio(made, attempted) {
-      return PlayerService.getRatio(made, attempted)
+      return PlayerService.getRatio(made, attempted, true)
     },
     getPerGame(element, matches) {
       if (matches > 0) {
@@ -298,10 +300,10 @@ export default {
       return PlayerService.getElementPer40Minutes(element, mins, matches)
     },
     getRatioPerGame (made, attempted, matches) {
-      return PlayerService.getRatioPerGame(made, attempted, matches)
+      return PlayerService.getRatioPerGame(made, attempted, matches, true)
     },
     getRatioPerMins (made, attempted, mins, matches) {
-      return PlayerService.getRatioPer40Minutes(made, attempted, mins, matches)
+      return PlayerService.getRatioPer40Minutes(made, attempted, mins, matches, true)
     },
     getLinkPlayer (id) {
       return '/player/' + this.team.id + '/' + id
@@ -326,6 +328,12 @@ export default {
       } else {
         return ''
       }
+    },
+    getShortName(name) {
+      let parts = name.split (" ")
+      const firstName = parts[0]
+      parts.shift()
+      return firstName.charAt(0)+". "+parts.join(" ")
     },
     goBack() {
       this.$router.go(-1)

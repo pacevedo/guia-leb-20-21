@@ -14,12 +14,16 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
+        hide-default-header
         :items="playerList"
         :search="search"
         :items-per-page="itemsPerPage"
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         dense
+        :header-props="{
+          disableSort: true
+        }"
         :footer-props="{
           itemsPerPageOptions: [50, 100, -1]
         }"

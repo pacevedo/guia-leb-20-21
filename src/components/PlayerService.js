@@ -14,33 +14,40 @@ const PlayerService = {
       return 0
     }
   },
-  getRatio: (made, attempted) => {
+  getRatio: (made, attempted, showPercentage) => {
     if (attempted > 0) {
       const percentage = ((made / attempted) * 100).toFixed(2)
-      return made+'/'+ attempted + ' ('+percentage+'%)'
+      return made+'/'+ attempted + (showPercentage ?' ('+percentage+'%)' : '')
     } else {
       return attempted !== undefined ? '0/0':''
     }
   },
-  getRatioPerGame: (made, attempted, matches) => {
+  getRatioPerGame: (made, attempted, matches, showPercentage) => {
     if (attempted > 0) {
       const madePerMatch = (made / matches).toFixed(1)
       const attemptedPerMatch = (attempted / matches).toFixed(1)
       const percentage = ((made / attempted) * 100).toFixed(2)
-      return madePerMatch+'/'+ attemptedPerMatch + ' ('+percentage+'%)'
+      return madePerMatch+'/'+ attemptedPerMatch + (showPercentage ?' ('+percentage+'%)' : '')
     } else {
       return attempted !== undefined ? '0/0':''
     } 
   },
-  getRatioPer40Minutes: (made, attempted, mins, matches) => {
+  getRatioPer40Minutes: (made, attempted, mins, matches, showPercentage) => {
     if (attempted > 0) {
       const seconds = PlayerService.getTotalSeconds(mins, matches)
       const madePer40Min = ((made / seconds) * 2400).toFixed(1)
       const attemptedPerMin = ((attempted / seconds) * 2400).toFixed(1)
       const percentage = ((made / attempted) * 100).toFixed(2)
-      return madePer40Min+'/'+ attemptedPerMin + ' ('+percentage+'%)'
+      return madePer40Min+'/'+ attemptedPerMin + (showPercentage ?' ('+percentage+'%)' : '')
     } else {
       return attempted !== undefined ? '0/0':''
+    }
+  },
+  getPercentage: (made, attempted) => {
+    if (attempted > 0) {
+      return ((made / attempted) * 100).toFixed(2)+'%'
+    } else {
+      return ''
     }
   },
   getElementPer40Minutes: (element, mins, matches) => {

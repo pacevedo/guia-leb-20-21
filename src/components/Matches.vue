@@ -5,20 +5,20 @@
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="td-date">Fecha</th>
                 <th class="td-team-preseason">Local</th>
                 <th class="td-score">Result.</th>
                 <th class="td-team-preseason">Visitante</th>
+                <th class="td-date">Fecha</th>
                 <th class="td-location">Ubicación</th>
                 <th>Vídeo</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="match in matches" :key="match.date">
-                <td class="td-date">{{match.date}}</td>
                 <td :class="getClass(match, true)">{{getTeam(match.local)}}</td>
                 <td class="td-score"><a :href="match.url" target="_blank">{{match.scoreLocal}} - {{match.scoreVisit}}</a></td>
                 <td :class="getClass(match, false)">{{getTeam(match.visit)}}</td>
+                <td class="td-date">{{match.date}}</td>
                 <td class="td-location">{{match.location}}</td>
                 <td>
                   <a v-if="match.video !== ''" :href="match.video" target="_blank">
