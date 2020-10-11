@@ -5,39 +5,40 @@
           <template v-slot:default>
             <thead>
               <tr>
+                <th></th>
                 <th class="td-team-preseason">Local</th>
                 <th class="td-score">Result.</th>
                 <th class="td-team-preseason">Visitante</th>
                 <th class="td-date">Fecha</th>
                 <th class="td-location">Ubicación</th>
-                <th>Vídeo</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="match in matches" :key="match.date">
+                <td>
+                  <a v-if="match.video !== ''" :href="match.video" target="_blank">
+                    <img src="../assets/video.png" height="20px" />
+                  </a>
+                </td>
                 <td :class="getClass(match, true)">{{getTeam(match.local)}}</td>
                 <td class="td-score"><a :href="match.url" target="_blank">{{match.scoreLocal}} - {{match.scoreVisit}}</a></td>
                 <td :class="getClass(match, false)">{{getTeam(match.visit)}}</td>
                 <td class="td-date">{{match.date}}</td>
                 <td class="td-location">{{match.location}}</td>
-                <td>
-                  <a v-if="match.video !== ''" :href="match.video" target="_blank">
-                    <img src="../assets/video.png" height="20px" />
-                  </a>
-                  </td>
               </tr>
             </tbody>
           </template>
       </v-simple-table>
     </div>
-    <div class="standings">
+    <div class="standings-team" v-if="showTotal">
       <h4>Total</h4>
       <v-simple-table dense>
         <template v-slot:default>
           <thead>
             <tr>
-              <th class="td-games">V</th>
-              <th class="td-games">D</th>
+              <th class="td-games">Part.</th>
+              <th class="td-games">G</th>
+              <th class="td-games">P</th>
               <th class="td-points">PF</th>
               <th class="td-points">PC</th>
               <th class="td-points-per-game">PPF</th>
@@ -46,6 +47,7 @@
           </thead>
           <tbody>
             <tr>
+              <td class="td-games">{{getMatches()}}</td>
               <td class="td-games">{{getWins()}}</td>
               <td class="td-games">{{getLosses()}}</td>
               <td class="td-points">{{getPoints(true)}}</td>
@@ -60,11 +62,14 @@
   </div>
 </template>
 <script>
+import MatchService from '@/components/MatchService.js'
+
 export default {
   name: 'Matches',
   props: {
     matches: Array,
-    team: String
+    team: String,
+    showTotal: Boolean
   },
   data () {
     return {
@@ -92,30 +97,17 @@ export default {
       }
       return tdClass
     },
+    getMatches() {
+      return this.matches.length
+    },
     getWins() {
-      const idTeam = this.team
-      return this.matches.reduce((acum,match) => { 
-        const {scoreLocal, scoreVisit} = match
-        const isWin = (match.local === idTeam && scoreLocal > scoreVisit) || 
-        (match.visit === idTeam && scoreLocal < scoreVisit)
-        return acum + isWin*1
-      }, 0)
+      return MatchService.getWins(this.matches, this.team)
     },
     getLosses() {
-      return this.matches.length - this.getWins()
+      return MatchService.getLosses(this.matches, this.team)
     },
     getPoints(favor) {
-      const idTeam = this.team
-      return this.matches.reduce((acum, match) => {
-        const {scoreLocal, scoreVisit} = match
-        let score = 0;
-        if (favor) {
-          score = match.local === idTeam ? scoreLocal : scoreVisit
-        } else {
-          score = match.local === idTeam ? scoreVisit : scoreLocal
-        }
-        return acum + score
-      }, 0)
+      return MatchService.getPoints(this.matches, this.team, favor)
     },
     getPointsPerGame(favor) {
       return (this.getPoints(favor) / this.matches.length).toFixed(2)

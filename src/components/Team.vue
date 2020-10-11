@@ -7,7 +7,7 @@
               color="primary"
               @click="goBack"
               right
-              fixed
+              absolute
             >Volver
           </v-btn>
         </v-col>
@@ -67,7 +67,7 @@
         <v-expansion-panel>
           <v-expansion-panel-header>Pretemporada</v-expansion-panel-header>
           <v-expansion-panel-content>
-            <Matches :matches="matches" :team="team.id"/>
+            <Matches :matches="matches" :team="team.id" :showTotal="true"/>
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>

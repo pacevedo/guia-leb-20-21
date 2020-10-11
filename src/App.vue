@@ -4,7 +4,9 @@
       <div class="logo"><img alt="LEB Oro" src="./assets/leboro.jpg" width="64px"></div>
       <div id="nav">
         <router-link to="/">Equipos</router-link> |
-        <router-link to="/players">Jugadores</router-link>
+        <router-link to="/players">Jugadores</router-link> |
+        <router-link to="/comparator">Comparador</router-link> |
+        <router-link to="/standings">Pretemporada</router-link>
       </div>
       <router-view/>
     </div>
@@ -42,6 +44,7 @@ export default {
 }
 #nav {
   text-align: center;
+  font-size: 14px;
   a {
     font-weight: bold;
     color: #2c3e50;

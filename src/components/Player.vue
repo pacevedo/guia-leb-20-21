@@ -7,7 +7,7 @@
               color="primary"
               @click="goBack"
               right
-              fixed
+              absolute
             >Volver
           </v-btn>
         </v-col>
